@@ -17,9 +17,19 @@ namespace Sledgehammer.Tests
         }
 
         [Test]
-        public void CallTo()
+        public void CallTo_ReturnsLazily()
         {
             A.CallTo(() => StaticClass.WithStaticIntMethod()).ReturnsLazily(() => 3);
+
+            var result = StaticClass.WithStaticIntMethod();
+
+            Assert.AreEqual(3, result);
+        }
+
+        [Test]
+        public void CallTo_Returns()
+        {
+            A.CallTo(() => StaticClass.WithStaticIntMethod()).Returns(3);
 
             var result = StaticClass.WithStaticIntMethod();
 

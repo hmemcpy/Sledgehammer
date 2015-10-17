@@ -2,16 +2,17 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using CodeCop.Core;
 using Sledgehammer;
 using Sledgehammer.FakeItEasy;
 
-public sealed class FakeItEasyContext : ISledgehammerContext
+public sealed class FakeItEasyContext : SledgehammerContext
 {
-    public Type InterceptorType => typeof (FakeItEasyMethodInterceptor);
+    public override Type InterceptorType => typeof (FakeItEasyMethodInterceptor);
 
-    public void Intercept(IMethodInterceptor interceptor)
+    public override void Intercept(IMethodInterceptor interceptor)
     {
-        var fieAssembly = FindFakeItEasyAssembly();
+        var fieAssembly = FindAssembly("FakeItEasy");
         if (fieAssembly == null) return;
 
         InterceptCallTo(interceptor, fieAssembly);
@@ -29,6 +30,8 @@ public sealed class FakeItEasyContext : ISledgehammerContext
         var callToOfT = aType.GetGenericMethod("CallTo", new[] {boundExprOfFunc});
 
         interceptor.InterceptMethod(callToOfT);
+
+        Cop.Intercept();
     }
 
     private void InterceptReturns(IMethodInterceptor interceptor, Assembly assembly)
@@ -39,10 +42,5 @@ public sealed class FakeItEasyContext : ISledgehammerContext
         foreach (MethodInfo returnMethod in returnMethods)
         {
         }
-    }
-
-    private Assembly FindFakeItEasyAssembly()
-    {
-        return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == "FakeItEasy");
     }
 }

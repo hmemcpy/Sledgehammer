@@ -1,30 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Linq;
 using System.Reflection;
-using CodeCop.Core;
-using CodeCop.Core.Contracts;
-using CodeCop.Core.Fluent;
-using Sledgehammer;
 
-public interface ISledgehammerContext
+namespace Sledgehammer
 {
-    Type InterceptorType { get; }
-    void Intercept(IMethodInterceptor interceptor);
-}
-
-public static class SledgehammerInterceptor
-{
-    public static void Use<TContext>() where TContext : ISledgehammerContext
+    public interface ISledgehammerContext
     {
-        var context = Activator.CreateInstance<TContext>();
-        context.Intercept((IMethodInterceptor)Activator.CreateInstance(context.InterceptorType));
+        Type InterceptorType { get; }
+        void Intercept(IMethodInterceptor interceptor);
     }
 
-    public static bool IsIntercepted<T>(Expression<Func<T>> expr)
+    public abstract class SledgehammerContext : ISledgehammerContext
     {
-        var method = ((MethodCallExpression)expr.Body).Method;
+        public abstract void Intercept(IMethodInterceptor interceptor);
+        public abstract Type InterceptorType { get; }
 
-        return method.IsIntercepted();
+        protected static Assembly FindAssembly(string assemblyName)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == assemblyName);
+        }
+    }
+
+    public static class SledgehammerInterceptor
+    {
+        public static void Use<TContext>() where TContext : ISledgehammerContext
+        {
+            var context = Activator.CreateInstance<TContext>();
+            context.Intercept((IMethodInterceptor)Activator.CreateInstance(context.InterceptorType));
+        }
     }
 }

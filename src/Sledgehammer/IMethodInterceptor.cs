@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
+﻿using System.Reflection;
 using CodeCop.Core;
 using CodeCop.Core.Fluent;
 
@@ -14,7 +11,7 @@ namespace Sledgehammer
 
     public abstract class MethodInterceptor : IMethodInterceptor
     {
-        public MethodInterceptor()
+        protected MethodInterceptor()
         {
             Cop.AsFluent();
         }
@@ -22,8 +19,6 @@ namespace Sledgehammer
         public void InterceptMethod(MethodInfo methodInfo)
         {
             methodInfo.Override(OnInterceptMethod);
-
-            Cop.Intercept();
         }
 
         protected abstract object OnInterceptMethod(InterceptionContext context);
