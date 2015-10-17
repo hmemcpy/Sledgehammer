@@ -51,7 +51,7 @@
     <Compile Include="IMethodInterceptor.cs" />
     <Compile Include="MockManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SledgehammerInterceptor.cs" />
+    <Compile Include="Sledgehammer.cs" />
     <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

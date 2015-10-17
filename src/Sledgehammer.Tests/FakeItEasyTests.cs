@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using NUnit.Framework;
+using Sledgehammer.FakeItEasy;
 using Sledgehammer.Tests.TestTypes;
 
 namespace Sledgehammer.Tests
@@ -13,7 +14,7 @@ namespace Sledgehammer.Tests
             // todo remove this after fixing appdomain scanning code
             var bootstrapper = A.Fake<IBootstrapper>();
 
-            SledgehammerInterceptor.Use<FakeItEasyContext>();
+            Sledgehammer.Use<FakeItEasyContext>();
         }
 
         [Test]

@@ -21,7 +21,7 @@ namespace Sledgehammer
         }
     }
 
-    public static class SledgehammerInterceptor
+    public static class Sledgehammer
     {
         public static void Use<TContext>() where TContext : ISledgehammerContext
         {
