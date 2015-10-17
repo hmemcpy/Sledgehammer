@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Sledgehammer.Tests.TestTypes;
 
-namespace Sledgehammer.Tests.Specs
+namespace Sledgehammer.Tests
 {
     [TestFixture]
     public class FakeItEasyTests
@@ -12,15 +12,18 @@ namespace Sledgehammer.Tests.Specs
         {
             // todo remove this after fixing appdomain scanning code
             var bootstrapper = A.Fake<IBootstrapper>();
+
             SledgehammerInterceptor.Use<FakeItEasyContext>();
         }
 
         [Test]
         public void CallTo()
         {
-            A.CallTo(() => StaticClass.WithStaticIntMethod());
+            A.CallTo(() => StaticClass.WithStaticIntMethod()).ReturnsLazily(() => 3);
 
-            Assert.True(SledgehammerInterceptor.IsIntercepted(() => StaticClass.WithStaticIntMethod()));
+            var result = StaticClass.WithStaticIntMethod();
+
+            Assert.AreEqual(3, result);
         }
     }
 }

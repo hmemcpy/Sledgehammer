@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using CodeCop.Core;
@@ -11,7 +12,7 @@ namespace Sledgehammer
         void InterceptMethod(MethodInfo methodInfo);
     }
 
-    internal class MethodInterceptor : IMethodInterceptor
+    public abstract class MethodInterceptor : IMethodInterceptor
     {
         public MethodInterceptor()
         {
@@ -20,15 +21,11 @@ namespace Sledgehammer
 
         public void InterceptMethod(MethodInfo methodInfo)
         {
-            methodInfo.Override(context =>
-            {
-                var target = (LambdaExpression) context.Parameters[0].Value;
-                var body = ((MethodCallExpression) target.Body);
-                body.Method.Override(c => null);
-                return null;
-            });
+            methodInfo.Override(OnInterceptMethod);
 
             Cop.Intercept();
         }
+
+        protected abstract object OnInterceptMethod(InterceptionContext context);
     }
 }

@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CodeCop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=401d1f9f00971572, processorArchitecture=MSIL">
-      <HintPath>..\packages\CodeCop.1.2.8\lib\net45\CodeCop.dll</HintPath>
+      <HintPath>..\packages\CodeCop.1.3.0\lib\net45\CodeCop.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IMethodInterceptor.cs" />
+    <Compile Include="MockManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SledgehammerInterceptor.cs" />
     <Compile Include="TypeExtensions.cs" />
