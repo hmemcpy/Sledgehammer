@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
+using CodeCop.Core;
+using CodeCop.Core.Fluent;
 
 namespace Sledgehammer
 {
     public class MockManager
     {
+        private readonly MethodBase method;
         private static readonly Dictionary<MethodBase, MockManager> instances = new Dictionary<MethodBase, MockManager>();
 
         private Stack<ICallRule> CallRules { get; }
 
-        private MockManager()
+        private MockManager(MethodBase method)
         {
+            this.method = method;
             CallRules = new Stack<ICallRule>();
         }
 
@@ -20,7 +25,7 @@ namespace Sledgehammer
             MockManager manager;
             if (!instances.TryGetValue(method, out manager))
             {
-                manager = new MockManager();
+                manager = new MockManager(method);
                 instances[method] = manager;
             }
 
@@ -34,8 +39,27 @@ namespace Sledgehammer
 
         public object Execute()
         {
+            if (CallRules.Count == 0)
+            {
+                Cop.Reset(method);
+                return null;
+            }
+
             var rule = CallRules.Pop();
+
+            if (CallRules.Count == 0)
+            {
+                Cop.Reset(method);
+            }
+
             return rule.Execute();
+        }
+
+        public static bool IsIntercepted<T>(Expression<Func<T>> x)
+        {
+            var body = (MethodCallExpression)x.Body;
+            var methodInfo = body.Method;
+            return methodInfo.IsIntercepted();
         }
     }
 

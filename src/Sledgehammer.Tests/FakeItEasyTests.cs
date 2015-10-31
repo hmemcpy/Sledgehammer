@@ -65,11 +65,34 @@ namespace Sledgehammer.Tests
             Assert.IsTrue(flag);
         }
 
+        [Test]
+        public void Invokes_with_arguments()
+        {
+            bool flag = false;
+            A.CallTo(() => StaticClass.WithVoidMethodArgs(A<int>.Ignored)).Invokes(i => flag = true);
+
+            StaticClass.WithVoidMethodArgs(0);
+
+            Assert.IsTrue(flag);
+        }
+
+        [Test]
+        public void Cleanup()
+        {
+            A.CallTo(() => StaticClass.WithStaticIntMethod()).Returns(2);
+            Assert.IsTrue(MockManager.IsIntercepted(() => StaticClass.WithStaticIntMethod()));
+            StaticClass.WithStaticIntMethod();
+            Assert.IsFalse(MockManager.IsIntercepted(() => StaticClass.WithStaticIntMethod()));
+        }
     }
 
     public static class StaticClass
     {
         public static void WithVoidMethod()
+        {
+        }
+
+        public static void WithVoidMethodArgs(int x)
         {
         }
 
