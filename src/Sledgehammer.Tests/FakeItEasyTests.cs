@@ -33,7 +33,6 @@ namespace Sledgehammer.Tests
             Assert.AreEqual("Hello", result);
         }
 
-
         [Test]
         public void Throws()
         {
@@ -43,6 +42,29 @@ namespace Sledgehammer.Tests
 
             Assert.AreEqual("Bad data!", ex.Message);
         }
+
+        [Test]
+        public void Invokes()
+        {
+            bool flag = false;
+            A.CallTo(() => StaticClass.WithVoidMethod()).Invokes(() => flag = true);
+
+            StaticClass.WithVoidMethod();
+
+            Assert.IsTrue(flag);
+        }
+
+        [Test]
+        public void Invokes2()
+        {
+            bool flag = false;
+            A.CallTo(() => StaticClass.WithVoidMethod()).Invokes(i => flag = true);
+
+            StaticClass.WithVoidMethod();
+
+            Assert.IsTrue(flag);
+        }
+
     }
 
     public static class StaticClass

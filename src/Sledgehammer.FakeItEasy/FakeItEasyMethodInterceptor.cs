@@ -40,15 +40,19 @@ namespace Sledgehammer
 
             fake.ReturnsLazily = (Func<dynamic, dynamic>)(f =>
             {
-                MockManager.GetManager(body.Method).ReturnValue = f(null);
+                MockManager.GetManager(body.Method).Add(new ReturnValueRule(f(null)));
                 return null;
             });
             fake.Throws = (Func<dynamic, Exception>)(f =>
             {
-                MockManager.GetManager(body.Method).Throws = f(null);
+                MockManager.GetManager(body.Method).Add(new ThrowRule(f(null)));
                 return null;
             });
-            //fake.Invokes = Return<IReturnValueConfiguration<int>>.Arguments(() => null);
+            fake.Invokes = (Func<Delegate, dynamic>)(a =>
+            {
+                MockManager.GetManager(body.Method).Add(new InvokeRule(() => a.FastDynamicInvoke(new object[] { null })));
+                return null;
+            });
             //fake.MustHaveHappened = ReturnVoid.Arguments(() => { });
             //fake.CallsBaseMethod = Return<IAfterCallSpecifiedConfiguration>.Arguments(() => null);
             //fake.WhenArgumentsMatch = Return<IReturnValueConfiguration<int>>.Arguments(() => null);
@@ -56,10 +60,7 @@ namespace Sledgehammer
             body.Method.Override(i =>
             {
                 var mockManager = MockManager.GetManager(i.InterceptedMethod);
-                if (mockManager.Throws != null)
-                    throw mockManager.Throws;
-
-                return mockManager.ReturnValue;
+                return mockManager.Execute();
             });
 
             Cop.Intercept();
