@@ -8,9 +8,8 @@ using FakeItEasy;
 using FakeItEasy.Configuration;
 using FakeItEasy.Core;
 using ImpromptuInterface;
-using ImpromptuInterface.Dynamic;
 
-namespace Sledgehammer.FakeItEasy
+namespace Sledgehammer
 {
     class FakeItEasyMethodInterceptor : MethodInterceptor
     {
@@ -18,12 +17,21 @@ namespace Sledgehammer.FakeItEasy
         {
             var interceptedMethod = (MethodInfo)context.InterceptedMethod;
 
-            var genericMethod = interceptedMethod.MakeGenericMethod(context.GenericArguments.ToArray());
+            Type returnType;
+            if (context.GenericArguments.Count > 0)
+            {
+                var genericMethod = interceptedMethod.MakeGenericMethod(context.GenericArguments.ToArray());
+                returnType = genericMethod.ReturnType;
+            }
+            else
+            {
+                returnType = interceptedMethod.ReturnType;
+            }
 
-            return Create(genericMethod.ReturnType, context);
+            return Create(returnType, context);
         }
 
-        private object Create(Type returnType, InterceptionContext context)
+        private static object Create(Type returnType, InterceptionContext context)
         {
             var target = (LambdaExpression)context.Parameters[0].Value;
             var body = (MethodCallExpression)target.Body;
@@ -35,13 +43,25 @@ namespace Sledgehammer.FakeItEasy
                 MockManager.GetManager(body.Method).ReturnValue = f(null);
                 return null;
             });
-            //fake.Throws = Return<IAfterCallSpecifiedConfiguration>.Arguments(() => null);
+            fake.Throws = (Func<dynamic, Exception>)(f =>
+            {
+                MockManager.GetManager(body.Method).Throws = f(null);
+                return null;
+            });
             //fake.Invokes = Return<IReturnValueConfiguration<int>>.Arguments(() => null);
             //fake.MustHaveHappened = ReturnVoid.Arguments(() => { });
             //fake.CallsBaseMethod = Return<IAfterCallSpecifiedConfiguration>.Arguments(() => null);
             //fake.WhenArgumentsMatch = Return<IReturnValueConfiguration<int>>.Arguments(() => null);
 
-            body.Method.Override(i => MockManager.GetManager(i.InterceptedMethod).ReturnValue);
+            body.Method.Override(i =>
+            {
+                var mockManager = MockManager.GetManager(i.InterceptedMethod);
+                if (mockManager.Throws != null)
+                    throw mockManager.Throws;
+
+                return mockManager.ReturnValue;
+            });
+
             Cop.Intercept();
 
             return Impromptu.DynamicActLike(fake, returnType);

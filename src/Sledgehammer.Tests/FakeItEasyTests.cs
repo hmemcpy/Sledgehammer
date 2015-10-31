@@ -1,6 +1,6 @@
-﻿using FakeItEasy;
+﻿using System.IO;
+using FakeItEasy;
 using NUnit.Framework;
-using Sledgehammer.FakeItEasy;
 
 namespace Sledgehammer.Tests
 {
@@ -10,7 +10,7 @@ namespace Sledgehammer.Tests
         [SetUp]
         public void Setup()
         {
-            Sledgehammer.Use<FakeItEasyContext>();
+            Sledgehammer.Use<FakeItEasy>();
         }
 
         [Test]
@@ -32,10 +32,25 @@ namespace Sledgehammer.Tests
 
             Assert.AreEqual("Hello", result);
         }
+
+
+        [Test]
+        public void Throws()
+        {
+            A.CallTo(() => StaticClass.WithVoidMethod()).Throws(new InvalidDataException("Bad data!"));
+
+            var ex = Assert.Throws<InvalidDataException>(() => StaticClass.WithVoidMethod());
+
+            Assert.AreEqual("Bad data!", ex.Message);
+        }
     }
 
     public static class StaticClass
     {
+        public static void WithVoidMethod()
+        {
+        }
+
         public static int WithStaticIntMethod()
         {
             throw new System.NotImplementedException();

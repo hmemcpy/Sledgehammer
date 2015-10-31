@@ -7,7 +7,7 @@
     <ProjectGuid>{0626D3E0-F43A-4CF2-8DB3-82E23CABAF5B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sledgehammer.FakeItEasy</RootNamespace>
+    <RootNamespace>Sledgehammer</RootNamespace>
     <AssemblyName>Sledgehammer.FakeItEasy</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,7 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FakeItEasyContext.cs" />
+    <Compile Include="FakeItEasy.cs" />
     <Compile Include="FakeItEasyMethodInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

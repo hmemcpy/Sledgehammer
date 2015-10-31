@@ -22,14 +22,6 @@ namespace Sledgehammer
             }
         }
 
-        public static MethodInfo GetGenericMethodDefinition(this Type type, string name, int arguments)
-        {
-            var methods = type.GetMethods();
-            return methods.Where(m => m.Name == name)
-                          .Where(method => method.IsGenericMethod)
-                          .FirstOrDefault(method => method.GetGenericArguments().Length == arguments);
-        }
-
         public static MethodInfo GetGenericMethod(this Type type, string name, Type[] parameterTypes)
         {
             var methods = type.GetMethods();
