@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Dynamic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using CodeCop.Core;
@@ -30,13 +29,12 @@ namespace Sledgehammer.FakeItEasy
             var body = (MethodCallExpression)target.Body;
 
             dynamic fake = new ExpandoObject();
-            fake.ReturnsLazily = Return<IAfterCallSpecifiedWithOutAndRefParametersConfiguration>.Arguments<Func<IFakeObjectCall, int>>(
-                func =>
-                {
-                    MockManager.GetManager(body.Method).ReturnValue = func(null);
-                    return null;
-                });
-            
+
+            fake.ReturnsLazily = (Func<dynamic, dynamic>)(f =>
+            {
+                MockManager.GetManager(body.Method).ReturnValue = f(null);
+                return null;
+            });
             //fake.Throws = Return<IAfterCallSpecifiedConfiguration>.Arguments(() => null);
             //fake.Invokes = Return<IReturnValueConfiguration<int>>.Arguments(() => null);
             //fake.MustHaveHappened = ReturnVoid.Arguments(() => { });
@@ -47,16 +45,6 @@ namespace Sledgehammer.FakeItEasy
             Cop.Intercept();
 
             return Impromptu.DynamicActLike(fake, returnType);
-        }
-
-        private static MethodInfo GetMethod(Type type, string name)
-        {
-            return type.GetInterfaces().Select(@interface => @interface.GetMethod(name)).FirstOrDefault(mi => mi != null);
-        }
-
-        private Func<IFakeObjectCall, int> Foo(Func<IFakeObjectCall, int> f)
-        {
-            return f;
         }
 
         public class X<T> : IReturnValueArgumentValidationConfiguration<T>

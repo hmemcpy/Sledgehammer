@@ -22,11 +22,26 @@ namespace Sledgehammer.Tests
 
             Assert.AreEqual(3, result);
         }
+
+        [Test]
+        public void Returns_string()
+        {
+            A.CallTo(() => StaticClass.WithStaticStringMethod()).Returns("Hello");
+
+            var result = StaticClass.WithStaticStringMethod();
+
+            Assert.AreEqual("Hello", result);
+        }
     }
 
     public static class StaticClass
     {
         public static int WithStaticIntMethod()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public static string WithStaticStringMethod()
         {
             throw new System.NotImplementedException();
         }

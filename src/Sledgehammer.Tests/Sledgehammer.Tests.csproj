@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FakeItEasyTests.cs" />
-    <Compile Include="TestTypes\StaticClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

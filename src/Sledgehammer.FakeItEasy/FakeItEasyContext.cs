@@ -7,7 +7,7 @@ namespace Sledgehammer.FakeItEasy
 {
     public sealed class FakeItEasyContext : SledgehammerContext
     {
-        public override Type InterceptorType => typeof (FakeItEasyMethodInterceptor);
+        public override Type InterceptorType => typeof(FakeItEasyMethodInterceptor);
 
         public override void Intercept(IMethodInterceptor interceptor)
         {
@@ -22,7 +22,7 @@ namespace Sledgehammer.FakeItEasy
             var aType = assembly.GetType("FakeItEasy.A");
 
             var unboundExpression = typeof (Expression<>);
-            var unboundFunc = typeof (Func<>);
+            var unboundFunc = typeof(Func<>);
             var boundExprOfFunc = unboundExpression.MakeGenericType(unboundFunc);
 
             var callToOfT = aType.GetGenericMethod("CallTo", new[] {boundExprOfFunc});
