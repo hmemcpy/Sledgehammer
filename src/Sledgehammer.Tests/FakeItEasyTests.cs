@@ -1,7 +1,6 @@
 ﻿using FakeItEasy;
 using NUnit.Framework;
 using Sledgehammer.FakeItEasy;
-using Sledgehammer.Tests.TestTypes;
 
 namespace Sledgehammer.Tests
 {
@@ -11,24 +10,11 @@ namespace Sledgehammer.Tests
         [SetUp]
         public void Setup()
         {
-            // todo remove this after fixing appdomain scanning code
-            var bootstrapper = A.Fake<IBootstrapper>();
-
             Sledgehammer.Use<FakeItEasyContext>();
         }
 
         [Test]
-        public void CallTo_ReturnsLazily()
-        {
-            A.CallTo(() => StaticClass.WithStaticIntMethod()).ReturnsLazily(() => 3);
-
-            var result = StaticClass.WithStaticIntMethod();
-
-            Assert.AreEqual(3, result);
-        }
-
-        [Test]
-        public void CallTo_Returns()
+        public void Returns_int()
         {
             A.CallTo(() => StaticClass.WithStaticIntMethod()).Returns(3);
 
@@ -37,4 +23,13 @@ namespace Sledgehammer.Tests
             Assert.AreEqual(3, result);
         }
     }
+
+    public static class StaticClass
+    {
+        public static int WithStaticIntMethod()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
 }

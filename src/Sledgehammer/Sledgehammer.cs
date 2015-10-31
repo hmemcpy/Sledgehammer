@@ -17,7 +17,13 @@ namespace Sledgehammer
 
         protected static Assembly FindAssembly(string assemblyName)
         {
-            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == assemblyName);
+            var fieAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == assemblyName);
+            if (fieAssembly == null)
+            {
+                var n = new AssemblyName(assemblyName);
+                fieAssembly = Assembly.Load(n);
+            }
+            return fieAssembly;
         }
     }
 
