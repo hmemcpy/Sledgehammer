@@ -1,16 +1,16 @@
-﻿using System.IO;
+using System.IO;
 using FakeItEasy;
 using NUnit.Framework;
 
-namespace Sledgehammer.Tests
+namespace Sledgehammer.Tests.FakeItEasy
 {
     [TestFixture]
-    public class FakeItEasyTests
+    public class FakeStaticMethodsTests
     {
         [SetUp]
         public void Setup()
         {
-            Sledgehammer.Use<FakeItEasy>();
+            Sledgehammer.Use<global::Sledgehammer.FakeItEasy>();
         }
 
         [Test]
@@ -84,27 +84,14 @@ namespace Sledgehammer.Tests
             StaticClass.WithStaticIntMethod();
             Assert.IsFalse(MockManager.IsIntercepted(() => StaticClass.WithStaticIntMethod()));
         }
-    }
 
-    public static class StaticClass
-    {
-        public static void WithVoidMethod()
+        [Test]
+        public void Falls_back_to_FIE_functionality_for_interfaces()
         {
-        }
+            var fake = A.Fake<IFoo>();
+            A.CallTo(() => fake.GetValue()).Returns(3);
 
-        public static void WithVoidMethodArgs(int x)
-        {
-        }
-
-        public static int WithStaticIntMethod()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public static string WithStaticStringMethod()
-        {
-            throw new System.NotImplementedException();
+            Assert.AreEqual(3, fake.GetValue());
         }
     }
-
 }
