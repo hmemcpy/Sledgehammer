@@ -58,10 +58,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sledgehammer.FakeItEasy\Sledgehammer.FakeItEasy.csproj">
-      <Project>{0626D3E0-F43A-4CF2-8DB3-82E23CABAF5B}</Project>
-      <Name>Sledgehammer.FakeItEasy</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sledgehammer\Sledgehammer.csproj">
       <Project>{96bef98a-692e-4d76-ab55-38345bd9a95b}</Project>
       <Name>Sledgehammer</Name>

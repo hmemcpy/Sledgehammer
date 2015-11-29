@@ -13,6 +13,7 @@ namespace Sledgehammer
         private static readonly Dictionary<MethodBase, MockManager> instances = new Dictionary<MethodBase, MockManager>();
 
         private Stack<ICallRule> CallRules { get; }
+        public int Invocations { get; private set; }
 
         private MockManager(MethodBase method)
         {
@@ -46,6 +47,7 @@ namespace Sledgehammer
             }
 
             var rule = CallRules.Pop();
+            Invocations++;
 
             if (CallRules.Count == 0)
             {

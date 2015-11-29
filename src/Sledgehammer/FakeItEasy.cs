@@ -36,7 +36,7 @@ namespace Sledgehammer
             var unboundExpression = typeof(Expression<>);
             var boundExpr = unboundExpression.MakeGenericType(genericArg);
             var isGeneric = genericArg.IsGenericTypeDefinition;
-            return isGeneric ? aType.GetGenericMethod("CallTo", new[] { boundExpr }) : aType.GetMethod("CallTo", new []{ boundExpr });
+            return isGeneric ? aType.GetGenericMethod("CallTo", new[] { boundExpr }) : aType.GetMethod("CallTo", new [] { boundExpr });
         }
     }
 }

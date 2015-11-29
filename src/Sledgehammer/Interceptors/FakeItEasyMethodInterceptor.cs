@@ -7,6 +7,7 @@ using CodeCop.Core;
 using CodeCop.Core.Extensions;
 using CodeCop.Core.Fluent;
 using ImpromptuInterface;
+using ImpromptuInterface.Dynamic;
 
 namespace Sledgehammer.Interceptors
 {
@@ -60,7 +61,10 @@ namespace Sledgehammer.Interceptors
                 MockManager.GetManager(targetMethod).Add(new InvokeRule(() => a.FastDynamicInvoke(new object[] { null })));
                 return null;
             });
-            //fake.MustHaveHappened = ReturnVoid.Arguments(() => { });
+            fake.MustHaveHappened = (Action<dynamic>)(a =>
+            {
+                Impromptu.InvokeMember(a, "Matches", MockManager.GetManager(targetMethod).Invocations);
+            });
             //fake.CallsBaseMethod = Return<IAfterCallSpecifiedConfiguration>.Arguments(() => null);
             //fake.WhenArgumentsMatch = Return<IReturnValueConfiguration<int>>.Arguments(() => null);
 

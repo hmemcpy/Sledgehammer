@@ -66,6 +66,26 @@ namespace Sledgehammer.Tests.FakeItEasy
         }
 
         [Test]
+        public void MustHaveHappened()
+        {
+            A.CallTo(() => StaticClass.WithStaticStringMethod()).Returns("Hello");
+
+            StaticClass.WithStaticStringMethod();
+
+            A.CallTo(() => StaticClass.WithStaticStringMethod()).MustHaveHappened();
+        }
+
+        [Test]
+        public void MustNotHaveHappened()
+        {
+            A.CallTo(() => StaticClass.WithStaticStringMethod()).Returns("Hello");
+
+            StaticClass.WithStaticStringMethod();
+
+            A.CallTo(() => StaticClass.WithVoidMethod()).MustNotHaveHappened();
+        }
+
+        [Test]
         public void Invokes_with_arguments()
         {
             bool flag = false;
