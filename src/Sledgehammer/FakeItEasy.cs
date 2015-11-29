@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using CodeCop.Core;
+using Sledgehammer.Interceptors;
 
 namespace Sledgehammer
 {

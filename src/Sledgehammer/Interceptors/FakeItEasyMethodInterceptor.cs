@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,12 +6,9 @@ using System.Reflection;
 using CodeCop.Core;
 using CodeCop.Core.Extensions;
 using CodeCop.Core.Fluent;
-using FakeItEasy;
-using FakeItEasy.Configuration;
-using FakeItEasy.Core;
 using ImpromptuInterface;
 
-namespace Sledgehammer
+namespace Sledgehammer.Interceptors
 {
     class FakeItEasyMethodInterceptor : MethodInterceptor
     {
@@ -78,37 +75,37 @@ namespace Sledgehammer
             return Impromptu.DynamicActLike(fake, returnType);
         }
 
-        public class X<T> : IReturnValueArgumentValidationConfiguration<T>
-        {
-            public IAfterCallSpecifiedWithOutAndRefParametersConfiguration ReturnsLazily(Func<IFakeObjectCall, T> valueProducer)
-            {
-                throw new NotImplementedException();
-            }
+        //public class X<T> : IReturnValueArgumentValidationConfiguration<T>
+        //{
+        //    public IAfterCallSpecifiedWithOutAndRefParametersConfiguration ReturnsLazily(Func<IFakeObjectCall, T> valueProducer)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
 
-            public IAfterCallSpecifiedConfiguration Throws(Func<IFakeObjectCall, Exception> exceptionFactory)
-            {
-                throw new NotImplementedException();
-            }
+        //    public IAfterCallSpecifiedConfiguration Throws(Func<IFakeObjectCall, Exception> exceptionFactory)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
 
-            public IReturnValueConfiguration<T> Invokes(Action<IFakeObjectCall> action)
-            {
-                throw new NotImplementedException();
-            }
+        //    public IReturnValueConfiguration<T> Invokes(Action<IFakeObjectCall> action)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
 
-            public void MustHaveHappened(Repeated repeatConstraint)
-            {
-                throw new NotImplementedException();
-            }
+        //    public void MustHaveHappened(Repeated repeatConstraint)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
 
-            public IAfterCallSpecifiedConfiguration CallsBaseMethod()
-            {
-                throw new NotImplementedException();
-            }
+        //    public IAfterCallSpecifiedConfiguration CallsBaseMethod()
+        //    {
+        //        throw new NotImplementedException();
+        //    }
 
-            public IReturnValueConfiguration<T> WhenArgumentsMatch(Func<ArgumentCollection, bool> argumentsPredicate)
-            {
-                throw new NotImplementedException();
-            }
-        }
+        //    public IReturnValueConfiguration<T> WhenArgumentsMatch(Func<ArgumentCollection, bool> argumentsPredicate)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
     }
 }
