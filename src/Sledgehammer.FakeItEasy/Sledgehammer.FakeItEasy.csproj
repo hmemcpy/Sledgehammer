@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CodeCop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=401d1f9f00971572, processorArchitecture=MSIL">
-      <HintPath>..\packages\CodeCop.1.3.0\lib\net45\CodeCop.dll</HintPath>
+    <Reference Include="CodeCop, Version=3.0.0.0, Culture=neutral, PublicKeyToken=401d1f9f00971572, processorArchitecture=MSIL">
+      <HintPath>..\packages\CodeCop.3.0.0\lib\net45\CodeCop.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FakeItEasy">
