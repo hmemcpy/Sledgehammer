@@ -9,15 +9,13 @@ namespace Sledgehammer
 {
     public class MockManager
     {
-        private readonly MethodBase method;
         private static readonly Dictionary<MethodBase, MockManager> instances = new Dictionary<MethodBase, MockManager>();
 
         private Stack<ICallRule> CallRules { get; }
         public int Invocations { get; private set; }
 
-        private MockManager(MethodBase method)
+        private MockManager()
         {
-            this.method = method;
             CallRules = new Stack<ICallRule>();
         }
 
@@ -26,7 +24,7 @@ namespace Sledgehammer
             MockManager manager;
             if (!instances.TryGetValue(method, out manager))
             {
-                manager = new MockManager(method);
+                manager = new MockManager();
                 instances[method] = manager;
             }
 
@@ -35,33 +33,45 @@ namespace Sledgehammer
 
         public void Add(ICallRule rule)
         {
-            CallRules.Push(rule);
+            var countingRule = new CountingRule(rule, this);
+            CallRules.Push(countingRule);
         }
 
         public object Execute()
         {
-            if (CallRules.Count == 0)
-            {
-                Cop.Reset(method);
-                return null;
-            }
-
-            var rule = CallRules.Pop();
-            Invocations++;
-
-            if (CallRules.Count == 0)
-            {
-                Cop.Reset(method);
-            }
+            var rule = CallRules.Count == 1 ? CallRules.Peek() : CallRules.Pop();
 
             return rule.Execute();
         }
 
-        public static bool IsIntercepted<T>(Expression<Func<T>> x)
+        internal static bool IsIntercepted<T>(Expression<Func<T>> x)
         {
             var body = (MethodCallExpression)x.Body;
             var methodInfo = body.Method;
             return methodInfo.IsIntercepted();
+        }
+
+        private class CountingRule : ICallRule
+        {
+            private readonly ICallRule rule;
+            private readonly MockManager manager;
+
+            public CountingRule(ICallRule rule, MockManager manager)
+            {
+                this.rule = rule;
+                this.manager = manager;
+            }
+
+            public object Execute()
+            {
+                manager.Invocations++;
+                return rule.Execute();
+            }
+        }
+
+        public static void Reset()
+        {
+            instances.Clear();
         }
     }
 

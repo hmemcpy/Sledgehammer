@@ -11,11 +11,6 @@ namespace Sledgehammer
 
     public abstract class MethodInterceptor : IMethodInterceptor
     {
-        protected MethodInterceptor()
-        {
-            Cop.AsFluent();
-        }
-
         public void InterceptMethod(MethodInfo methodInfo)
         {
             methodInfo.Override(OnInterceptMethod);

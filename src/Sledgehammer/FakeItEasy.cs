@@ -10,9 +10,15 @@ namespace Sledgehammer
     {
         public override Type InterceptorType => typeof(FakeItEasyMethodInterceptor);
 
+        public FakeItEasy()
+        {
+            Cop.AsFluent();
+            MockManager.Reset();
+        }
+
         public override void Intercept(IMethodInterceptor interceptor)
         {
-            var fieAssembly = FindAssembly("FakeItEasy");
+            var fieAssembly = LoadAssembly("FakeItEasy");
             if (fieAssembly == null) return;
 
             InterceptCallTo(interceptor, fieAssembly);

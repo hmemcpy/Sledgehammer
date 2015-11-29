@@ -1,4 +1,4 @@
-﻿namespace Sledgehammer.Tests
+﻿namespace Sledgehammer.Tests.TestTypes
 {
     public interface IFoo
     {

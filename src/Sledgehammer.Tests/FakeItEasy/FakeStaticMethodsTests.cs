@@ -1,6 +1,7 @@
 using System.IO;
 using FakeItEasy;
 using NUnit.Framework;
+using Sledgehammer.Tests.TestTypes;
 
 namespace Sledgehammer.Tests.FakeItEasy
 {
@@ -76,6 +77,17 @@ namespace Sledgehammer.Tests.FakeItEasy
         }
 
         [Test]
+        public void MustHaveHappenedTwice()
+        {
+            A.CallTo(() => StaticClass.WithStaticStringMethod()).Returns("Hello");
+
+            StaticClass.WithStaticStringMethod();
+            StaticClass.WithStaticStringMethod();
+
+            A.CallTo(() => StaticClass.WithStaticStringMethod()).MustHaveHappened(Repeated.Exactly.Twice);
+        }
+
+        [Test]
         public void MustNotHaveHappened()
         {
             A.CallTo(() => StaticClass.WithStaticStringMethod()).Returns("Hello");
@@ -97,12 +109,12 @@ namespace Sledgehammer.Tests.FakeItEasy
         }
 
         [Test]
-        public void Cleanup()
+        public void CleanStart()
         {
+            var method = Info.OfMethod("Sledgehammer.Tests", "Sledgehammer.Tests.TestTypes.StaticClass", "WithStaticIntMethod");
             A.CallTo(() => StaticClass.WithStaticIntMethod()).Returns(2);
-            Assert.IsTrue(MockManager.IsIntercepted(() => StaticClass.WithStaticIntMethod()));
-            StaticClass.WithStaticIntMethod();
-            Assert.IsFalse(MockManager.IsIntercepted(() => StaticClass.WithStaticIntMethod()));
+
+            Assert.AreEqual(0, MockManager.GetManager(method).Invocations);
         }
 
         [Test]

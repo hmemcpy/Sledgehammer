@@ -7,7 +7,6 @@ using CodeCop.Core;
 using CodeCop.Core.Extensions;
 using CodeCop.Core.Fluent;
 using ImpromptuInterface;
-using ImpromptuInterface.Dynamic;
 
 namespace Sledgehammer.Interceptors
 {
@@ -78,6 +77,13 @@ namespace Sledgehammer.Interceptors
 
             return Impromptu.DynamicActLike(fake, returnType);
         }
+
+
+
+
+
+
+
 
         //public class X<T> : IReturnValueArgumentValidationConfiguration<T>
         //{
